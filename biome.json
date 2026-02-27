@@ -31,7 +31,14 @@
         "useSemanticElements": "off",
         "useKeyWithClickEvents": "off",
         "noNoninteractiveElementInteractions": "off",
-        "noLabelWithoutControl": "off"
+        "noLabelWithoutControl": "off",
+        "noStaticElementInteractions": "off"
+      },
+      "complexity": {
+        "noUselessSwitchCase": "off"
+      },
+      "style": {
+        "noNestedTernary": "off"
       }
     },
     "domains": {
