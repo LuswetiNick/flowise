@@ -4,6 +4,7 @@ import Link from "next/link";
 import LoginForm from "@/components/auth/login-form";
 import Logo from "@/components/logo";
 import { FloatingPaths } from "@/components/ui/floating-paths";
+
 export const metadata: Metadata = {
   title: "Sign In | Flowise",
   description: "Sign in to your Flowise account to access your dashboard.",

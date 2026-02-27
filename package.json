@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prepare": "husky",
     "check": "ultracite check",
     "fix": "ultracite fix",
     "db:generate": "prisma generate",
@@ -42,17 +41,10 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
     "prisma": "^7.4.1",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5",
     "ultracite": "7.2.3"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
-      "pnpm dlx ultracite fix"
-    ]
   }
 }
