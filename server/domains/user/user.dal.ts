@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { cache } from "react";
 import { auth } from "@/lib/auth";
 import "server-only";
+import prisma from "@/server/db";
 
 /**
  * Get current user
@@ -29,5 +30,19 @@ export const requireUser = cache(async () => {
   if (!user) {
     redirect("/login");
   }
+  return user;
+});
+
+// Get User By ID
+export const getUserById = cache(async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      image: true,
+    },
+  });
   return user;
 });

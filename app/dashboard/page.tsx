@@ -1,9 +1,10 @@
 import Header from "@/components/dashboard/header";
-import { getCurrentUser, requireUser } from "@/server/domains/user/user.dal";
+import { requireUser } from "@/server/domains/user/user.dal";
+import { caller } from "@/server/trpc/server";
 
 export default async function Dashboard() {
   await requireUser();
-  const user = await getCurrentUser();
+  const user = await caller.user.getUser();
 
   return (
     <div>

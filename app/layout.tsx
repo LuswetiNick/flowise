@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { TRPCReactProvider } from "@/server/trpc/client";
 
 const ibmPlexSans = IBM_Plex_Sans({
   variable: "--font-ibm-plex-sans",
@@ -37,7 +38,7 @@ export default function RootLayout({
         className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} ${ibmPlexSerif.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <main>{children}</main>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
           <Toaster richColors />
         </ThemeProvider>
       </body>
