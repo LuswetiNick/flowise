@@ -17,7 +17,6 @@ export const PublicUserSchema = UserSchema.pick({
   name: true,
   email: true,
   image: true,
-  createdAt: true,
 });
 
 // Type exports

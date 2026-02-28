@@ -30,7 +30,7 @@ const OAuthButton = ({ provider }: { provider: OAuthProvider }) => {
     await authClient.signIn.social({
       provider,
       callbackURL: "/dashboard",
-      errorCallbackURL: "/get-started/error",
+      errorCallbackURL: "/error",
       fetchOptions: {
         onResponse: () => {
           setLoading(null);
