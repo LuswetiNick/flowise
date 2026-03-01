@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { useTRPC } from "@/server/trpc/client";
 import { Button } from "../ui/button";
 
@@ -18,6 +19,14 @@ const Testing = () => {
     })
   );
 
+  const testAi = useMutation(
+    trpc.testAI.mutationOptions({
+      onSuccess: () => {
+        toast.info("AI function triggered! We'll let you know when it's done.");
+      },
+    })
+  );
+
   return (
     <div>
       <h2>Testing TRPC</h2>
@@ -28,6 +37,14 @@ const Testing = () => {
         size="sm"
       >
         Create Workflow
+      </Button>
+      <Button
+        disabled={testAi.isPending}
+        onClick={() => testAi.mutate()}
+        size="sm"
+        variant="outline"
+      >
+        Test AI
       </Button>
     </div>
   );
