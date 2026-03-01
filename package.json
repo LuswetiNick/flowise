@@ -11,7 +11,8 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "db:push": "prisma db push"
+    "db:push": "prisma db push",
+    "inngest:dev": "inngest-cli dev"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
@@ -27,6 +28,7 @@
     "class-variance-authority": "^0.7.1",
     "client-only": "^0.0.1",
     "clsx": "^2.1.1",
+    "inngest": "^3.52.4",
     "lucide-react": "^0.575.0",
     "motion": "^12.34.3",
     "next": "16.1.6",
@@ -48,6 +50,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "inngest-cli": "^1.17.1",
     "prisma": "^7.4.1",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",

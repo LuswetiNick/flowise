@@ -51,17 +51,13 @@ export default function AuthErrorPage() {
                 </ul>
               </div>
               <div className="flex flex-col gap-2">
-                <Button asChild className="w-full">
-                  <Link href="/login">
-                    <RefreshCw className="size-4" />
-                    Try Again
-                  </Link>
+                <Button className="w-full" render={<Link href="/login" />}>
+                  <RefreshCw className="size-4" />
+                  Try Again
                 </Button>
-                <Button asChild className="w-full" variant="outline">
-                  <Link href="/">
-                    <ArrowLeft className="size-4" />
-                    Back to Home
-                  </Link>
+                <Button className="w-full" render={<Link href="/" />} variant="outline">
+                  <ArrowLeft className="size-4" />
+                  Back to Home
                 </Button>
               </div>
               <div className="text-center text-muted-foreground text-xs">
