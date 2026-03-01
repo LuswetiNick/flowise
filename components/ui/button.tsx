@@ -1,10 +1,13 @@
-import { Slot } from "@radix-ui/react-slot";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 import { motion, useMotionTemplate, useMotionValue } from "motion/react";
-import * as React from "react";
+import type { MouseEvent } from "react";
+
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "group relative inline-flex items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-xl font-semibold text-sm transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "group relative inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-xl font-semibold text-sm transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -28,6 +31,7 @@ const buttonVariants = cva(
         sm: "h-8 rounded-lg px-4 text-xs",
         lg: "h-12 rounded-xl px-10 text-base",
         icon: "h-10 w-10",
+        "icon-xs": "size-6 rounded-lg p-0",
       },
     },
     defaultVariants: {
@@ -37,64 +41,79 @@ const buttonVariants = cva(
   }
 );
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
+export type ButtonProps = useRender.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants>;
+
+// Isolated so useRender is always called unconditionally within its own render cycle.
+function ButtonCompose({
+  render,
+  props,
+}: {
+  render: useRender.ComponentProps<"button">["render"];
+  props: useRender.ComponentProps<"button">;
+}) {
+  return useRender({
+    defaultTagName: "button",
+    props: props as Record<string, unknown>,
+    render,
+    state: { slot: "button" },
+  });
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
+function Button({
+  className,
+  variant,
+  size,
+  render,
+  children,
+  ...props
+}: ButtonProps) {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-      const { left, top } = e.currentTarget.getBoundingClientRect();
-      mouseX.set(e.clientX - left);
-      mouseY.set(e.clientY - top);
-    };
+  const handleMouseMove = (e: MouseEvent<HTMLButtonElement>) => {
+    const { left, top } = e.currentTarget.getBoundingClientRect();
+    mouseX.set(e.clientX - left);
+    mouseY.set(e.clientY - top);
+  };
 
-    const background = useMotionTemplate`radial-gradient(circle at ${mouseX}px ${mouseY}px, rgba(255,255,255,0.15), transparent 80%)`;
+  const background = useMotionTemplate`radial-gradient(circle at ${mouseX}px ${mouseY}px, rgba(255,255,255,0.15), transparent 80%)`;
 
-    if (asChild) {
-      return (
-        <Comp
-          className={`${buttonVariants({ variant, size })} ${className || ""}`}
-          ref={ref}
-          {...props}
-        >
-          {children}
-        </Comp>
-      );
-    }
-
-    const MotionButton = motion.button;
-
+  if (render) {
     return (
-      <MotionButton
-        className={`${buttonVariants({ variant, size })} ${className || ""}`}
-        onMouseMove={handleMouseMove}
-        ref={ref}
-        transition={{ type: "spring", stiffness: 400, damping: 17 }}
-        whileHover={{ scale: variant === "link" ? 1 : 1.02 }}
-        whileTap={{ scale: variant === "link" ? 1 : 0.98 }}
-        // biome-ignore lint/suspicious/noExplicitAny: Motion button requires any for props compatibility
-        {...(props as any)}
-      >
-        {variant !== "link" && variant !== "ghost" && (
-          <motion.div
-            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-            style={{ background }}
-          />
+      <ButtonCompose
+        props={mergeProps<"button">(
+          { className: cn(buttonVariants({ variant, size }), className) },
+          props
         )}
-        <span className="relative z-10 flex items-center justify-center gap-2">
-          {children}
-        </span>
-      </MotionButton>
+        render={render}
+      />
     );
   }
-);
-Button.displayName = "Button";
+
+  const MotionButton = motion.button;
+
+  return (
+    <MotionButton
+      className={cn(buttonVariants({ variant, size }), className)}
+      onMouseMove={handleMouseMove}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+      whileHover={{ scale: variant === "link" ? 1 : 1.02 }}
+      whileTap={{ scale: variant === "link" ? 1 : 0.98 }}
+      // biome-ignore lint/suspicious/noExplicitAny: Motion button requires any for props compatibility
+      {...(props as any)}
+    >
+      {variant !== "link" && variant !== "ghost" && (
+        <motion.div
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          style={{ background }}
+        />
+      )}
+      <span className="relative z-10 flex items-center justify-center gap-2">
+        {children}
+      </span>
+    </MotionButton>
+  );
+}
 
 export { Button, buttonVariants };

@@ -1,7 +1,7 @@
 "use client";
 import { Loader } from "lucide-react";
 import Image from "next/image";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup } from "@/components/ui/field";
@@ -23,7 +23,11 @@ const OAuthButton = ({ provider }: { provider: OAuthProvider }) => {
   const { loadingProvider, setLoading } = useContext(OAuthLoadingContext);
   const isLoading = loadingProvider === provider;
   const isDisabled = loadingProvider !== null;
-  const lastMethod = authClient.getLastUsedLoginMethod();
+  const [lastMethod, setLastMethod] = useState<OAuthProvider | null>(null);
+
+  useEffect(() => {
+    setLastMethod(authClient.getLastUsedLoginMethod() as OAuthProvider | null);
+  }, []);
 
   async function handleOAuth() {
     setLoading(provider);

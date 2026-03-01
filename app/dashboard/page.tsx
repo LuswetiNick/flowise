@@ -1,4 +1,5 @@
 import Header from "@/components/dashboard/header";
+import Testing from "@/components/dashboard/test";
 import { requireUser } from "@/server/domains/user/user.dal";
 import { caller } from "@/server/trpc/server";
 
@@ -9,7 +10,8 @@ export default async function Dashboard() {
   return (
     <div>
       <Header />
-      {JSON.stringify(user)}
+      <p>Hello, {user.name}!</p>
+      <Testing />
     </div>
   );
 }
