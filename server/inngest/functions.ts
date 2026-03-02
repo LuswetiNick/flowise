@@ -16,6 +16,11 @@ export const testAI = inngest.createFunction(
       system: "You are a helpful assistant.",
       prompt: "What is the meaning of life, the universe, and everything?",
       model: google("gemini-2.5-flash"),
+      experimental_telemetry: {
+        isEnabled: true,
+        recordInputs: true,
+        recordOutputs: true,
+      },
     });
     return steps;
   }
